@@ -1,0 +1,36 @@
+const express = require('express'); // import express
+const transactionRouter = require('./transactionRouter'); //import file we are testing
+const app = express(); //an instance of an express app, a 'fake' express app
+const request = require('supertest');
+
+jest.mock('../models/transaction');
+const Transaction = require('../models/transaction');
+
+app.use(transactionRouter); //routes
+
+describe('Post Endpoints', () => {
+  beforeEach(() => {
+    Transaction.findAll.mockImplementation(() => {
+      {
+      }
+    });
+  });
+
+  it('Response 200 /getTransactions', async () => {
+    const res = await request(app).get('/getTransactions');
+    expect(res.statusCode).toEqual(200);
+  });
+});
+
+describe('Post Endpoints', () => {
+  beforeEach(() => {
+    Transaction.findAll.mockImplementation(() => {
+      throw new Error('Error');
+    });
+  });
+
+  it('Response 401 /getTransactions', async () => {
+    const res = await request(app).get('/getTransactions');
+    expect(res.statusCode).toEqual(401);
+  });
+});
