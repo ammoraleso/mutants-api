@@ -19,9 +19,30 @@ router.post('/mutant', async (req, res) => {
       }
     }
 
-    mutantController.validateMutant(dna);
+    let isMutant = await mutantController.validateMutant(dna);
+    if (isMutant) {
+      res.send({
+        Description: 'El individuo es MUTANTE',
+        isMutant: isMutant,
+        Status: 'Ok',
+      });
+      return;
+    }
+    res.status(403).send({
+      Description: 'El individuo es MUTANTE',
+      isMutant: isMutant,
+      Status: 'Bad',
+    });
+  } catch (e) {
+    logger.error(e.message);
+    res.status(400).send({ Error: e.message });
+  }
+});
 
-    res.send({ Status: 'ok' });
+router.get('/stats', async (req, res) => {
+  try {
+    const stats = await mutantController.getStats();
+    res.send(stats);
   } catch (e) {
     logger.error(e.message);
     res.status(400).send({ Error: e.message });

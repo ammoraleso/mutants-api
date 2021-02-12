@@ -7,7 +7,7 @@ const Dna = require('../models/dna');
 const resultArray = [];
 
 const mockDna = ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'];
-
+const mockBadDna = ['ATGCGM', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'];
 const mockDnaToSave = new Dna(mockDna, true);
 
 const dna = ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'];
@@ -43,6 +43,14 @@ describe('Controller test', () => {
   it('conver To matrix', () => {
     const matrix = mutantController.convertToMatrix(dna);
     expect(matrix).toMatchObject(mockMatrix);
+  });
+
+  it('conver To matrix fail', () => {
+    try {
+      const matrix = mutantController.convertToMatrix(mockBadDna);
+    } catch (err) {
+      expect(err.message).toContain('Letter is not allowed for dna');
+    }
   });
 
   it('isMutant True', async () => {

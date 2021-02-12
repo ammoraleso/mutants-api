@@ -11,9 +11,7 @@ app.use(mutantRouter); //routes
 
 describe('Post Endpoints', () => {
   beforeEach(() => {
-    mutantController.validateMutant.mockImplementation(() => {
-      true;
-    });
+    mutantController.validateMutant.mockReturnValue(true);
   });
 
   it('Response 200 /mutant', async () => {
@@ -46,6 +44,30 @@ describe('Post Endpoints', () => {
       .post('/mutant')
       .type('json')
       .send({ dna: '' });
+    expect(res.statusCode).toEqual(400);
+  });
+
+  it('Response 403 /mutant', async () => {
+    mutantController.validateMutant.mockReturnValue(false);
+    const res = await request(app)
+      .post('/mutant')
+      .type('json')
+      .send({
+        dna: ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'],
+      });
+    expect(res.statusCode).toEqual(403);
+  });
+
+  it('Response 200 /stats', async () => {
+    const res = await request(app).get('/stats');
+    expect(res.statusCode).toEqual(200);
+  });
+
+  it('Response 200 /stats', async () => {
+    mutantController.getStats.mockImplementation(() => {
+      throw new Error('Error');
+    });
+    const res = await request(app).get('/stats');
     expect(res.statusCode).toEqual(400);
   });
 });

@@ -1,7 +1,9 @@
 const logger = require('../logger/logger')(module);
 const Dna = require('../models/dna');
+const Transaction = require('../models/transaction');
 
 let counterSequence = 0;
+let lettesOfDna = ['A', 'T', 'G', 'C'];
 
 class mutantController {
   static async validateMutant(dna) {
@@ -33,7 +35,11 @@ class mutantController {
     dna.forEach((line) => {
       let tmpArray = [];
       for (let i = 0; i <= line.length - 1; i++) {
-        tmpArray.push(line[i]);
+        if (lettesOfDna.includes(line[i])) {
+          tmpArray.push(line[i]);
+        } else {
+          throw new Error('Letter is not allowed for dna');
+        }
       }
       matrix.push(tmpArray);
     });
@@ -155,6 +161,27 @@ class mutantController {
         counterSequence++;
       }
     }
+  }
+
+  static async getStats() {
+    let dnaStats = await Dna.findAll();
+    let stats = {Description : "No hay individuos en la base de datos"};
+    if (dnaStats != null && dnaStats.length != 0) {
+      const counterMutants = dnaStats.filter((item) => {
+        return item.isMutant === true;
+      }).length;
+      const counterHumans = dnaStats.filter((item) => {
+        return item.isMutant === false;
+      }).length;
+
+      let ratio = counterMutants / counterHumans;
+      stats = {
+        count_mutant_dna: counterMutants,
+        count_hummans_dna: counterHumans,
+        ratio: ratio,
+      };
+    }
+    return stats;
   }
 }
 
