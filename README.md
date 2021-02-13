@@ -19,6 +19,7 @@ Ejercicio práctico para MercadoLibre.
   - [Scripts](#scripts)
   - [Cobertura](#cobertura)
 - [Algoritmo](#Algoritmo)
+- [Desplieque](#Desplieque)
 
 ## Ejercicio
 
@@ -263,4 +264,4 @@ Consideraciones:
 
 Para esto se utilizo el siguiente modelo (Azure + Node + MongoDb):
 
-![Coverage Image](doc/images/architecture.png)
+![Coverage Image](doc/images/diagram.png)
