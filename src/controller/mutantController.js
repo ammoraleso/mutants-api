@@ -162,7 +162,8 @@ class mutantController {
       }
     }
   }
-
+  
+  //TODO Crear tabla de conteo
   static async getStats() {
     let dnaStats = await Dna.findAll();
     let stats = {Description : "No hay individuos en la base de datos"};

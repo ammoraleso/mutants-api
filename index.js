@@ -1,9 +1,9 @@
 const express = require('express');
-const logger = require('./logger/logger')(module);
-const mutantRouter = require('./router/mutantRouter');
-const transactionRouter = require('./router/transactionRouter');
-const healthCheck = require('./router/healthCheck');
-const database = require('./database/database');
+const logger = require('./src/logger/logger')(module);
+const mutantRouter = require('./src/router/mutantRouter');
+const transactionRouter = require('./src/router/transactionRouter');
+const healthCheck = require('./src/router/healthCheck');
+const database = require('./src/database/database');
 
 const app = express();
 
