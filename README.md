@@ -18,6 +18,7 @@ Ejercicio práctico para MercadoLibre.
   - [Automaticos](#automaticos)
   - [Scripts](#scripts)
   - [Cobertura](#cobertura)
+- [Algoritmo](#Algoritmo)
 
 ## Ejercicio
 
@@ -243,3 +244,17 @@ Para la creacion y ejecucion de test utilice Jest y Supertest donde mockee todos
 En este caso intente tener el mayor coverage posible y logré el 100% según lo que muestrán los test locales.
 
 ![Coverage Image](doc/images/coverage.PNG)
+
+#### Algoritmo
+
+Para realizar el algorimo lo hice de la siguiente manera:
+
+![Coverage Image](doc/images/Algoritmo.PNG)
+
+Consideraciones:
+
+    - Recorrer la matriz hasta tener mas de 1 secuencia y terminar el procedimiento
+
+    - Se recorren las matrices inferiores y superriores en los dos sentidos
+
+    - Aprovechar la matriz NXN para poder recorrerla de manera horizontal y vertical
