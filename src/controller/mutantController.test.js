@@ -70,16 +70,6 @@ describe('Controller test', () => {
     expect(resp).toBe(true);
   });
 
-  it('isMutant false', async () => {
-    Stats.save = jest.fn();
-    Stats.save.mockImplementation(() => {
-      Promise.resolve(true);
-    });
-    Stats.findAll.mockReturnValue([]);
-    const isMutant = await mutantController.isMutant(mockMatrixHuman);
-    expect(isMutant).toBe(false);
-  });
-
   it('conver To matrix', () => {
     const matrix = mutantController.convertToMatrix(dna);
     expect(matrix).toMatchObject(mockMatrix);
@@ -91,6 +81,16 @@ describe('Controller test', () => {
     } catch (err) {
       expect(err.message).toContain('Letter is not allowed for dna');
     }
+  });
+
+  it('isMutant false', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixHuman);
+    expect(isMutant).toBe(false);
   });
 
   it('isMutant True', async () => {
@@ -112,6 +112,76 @@ describe('Controller test', () => {
       { count_humans_dna: 1, count_mutants_dna: 1 },
     ]);
     const isMutant = await mutantController.isMutant(mockMatrixHuman);
+    expect(isMutant).toBe(false);
+  });
+
+  it('saveStats without find all registers and whith existin DNA', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    Dna.findDna.mockReturnValue(mockDnaToSave);
+    const isMutant = await mutantController.saveStats(dna, false);
+    expect(isMutant).toBe(false);
+  });
+
+  it('saveStats without find all registers and whithout existin DNA', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    Dna.findDna.mockReturnValue(null);
+    const isMutant = await mutantController.saveStats(dna, false);
+    expect(isMutant).toBe(true);
+  });
+
+  it('saveStats without find all registers and whithout existin DNA', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    Dna.findDna.mockReturnValue(null);
+    const isMutant = await mutantController.saveStats(dna, true);
+    expect(isMutant).toBe(true);
+  });
+
+  it('saveStats with find all registers and whith existin DNA no mutant', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Dna.findDna.mockReturnValue(null);
+    Stats.findAll.mockReturnValue([
+      { count_humans_dna: 1, count_mutants_dna: 1 },
+    ]);
+    const isMutant = await mutantController.saveStats(dna, false);
+    expect(isMutant).toBe(true);
+  });
+
+  it('saveStats with find all registers and whith existin DNA mutant', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Dna.findDna.mockReturnValue(null);
+    Stats.findAll.mockReturnValue([
+      { count_humans_dna: 1, count_mutants_dna: 1 },
+    ]);
+    const isMutant = await mutantController.saveStats(dna, true);
+    expect(isMutant).toBe(true);
+  });
+
+  it('saveStats with find all registers and whith existin DNA', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Dna.findDna.mockReturnValue(mockDnaToSave);
+    Stats.findAll.mockReturnValue(null);
+    const isMutant = await mutantController.saveStats(dna, false);
     expect(isMutant).toBe(false);
   });
 
@@ -159,5 +229,31 @@ describe('Controller test', () => {
         'Error when try to validate if the dna belong to mutant'
       );
     }
+  });
+
+  it('get Stats without result', async () => {
+    Stats.findAll = jest.fn();
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.getStats();
+    expect(isMutant).toEqual({
+      Description: 'No hay individuos para analizar',
+    });
+  });
+
+  it('get Stats with result', async () => {
+    Stats.findAll = jest.fn();
+    Stats.findAll.mockReturnValue([
+      {
+        count_mutants_dna: 1,
+        count_humans_dna: 1,
+        ratio: 1,
+      },
+    ]);
+    const isMutant = await mutantController.getStats();
+    expect(isMutant).toEqual({
+      count_mutants_dna: 1,
+      count_humans_dna: 1,
+      ratio: 1,
+    });
   });
 });

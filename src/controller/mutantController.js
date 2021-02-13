@@ -12,6 +12,8 @@ class mutantController {
       let matrix = this.convertToMatrix(dna);
       let isMutant = await this.isMutant(matrix);
       logger.info('Is it mutant? ' + isMutant);
+      //Before to save to know if we need to add stats
+      await this.saveStats(dna, isMutant);
       const dnaToSave = new Dna(dna, isMutant);
       await dnaToSave.save();
       logger.info('DNA stored in db');
@@ -53,30 +55,7 @@ class mutantController {
   static async isMutant(matrix) {
     counterSequence = 0;
     await matrix.map((col, i) => this.getLinesWithSequence(matrix, i));
-    logger.info(counterSequence);
     let isMutant = counterSequence > 1 ? true : false;
-    let stats = await Stats.findAll();
-    if (stats.length === 0) {
-      if (isMutant) {
-        stats = new Stats(1, 0);
-      } else {
-        stats = new Stats(1, 0);
-      }
-      await stats.save();
-      return isMutant;
-    }
-    if (isMutant) {
-      stats = new Stats(
-        stats[0].count_mutants_dna + 1,
-        stats[0].count_humans_dna
-      );
-    } else {
-      stats = new Stats(
-        stats[0].count_mutants_dna,
-        stats[0].count_humans_dna + 1
-      );
-    }
-    await stats.save();
     return isMutant;
   }
 
@@ -195,7 +174,37 @@ class mutantController {
     }
   }
 
-  //TODO Crear tabla de conteo
+  static async saveStats(dna, isMutant) {
+    let dnaFound = await Dna.findDna(dna);
+    if (dnaFound !== null) {
+      return false;
+    }
+    let stats = await Stats.findAll();
+
+    if (stats.length === 0) {
+      if (isMutant) {
+        stats = new Stats(1, 0);
+      } else {
+        stats = new Stats(1, 0);
+      }
+    } else {
+      if (isMutant) {
+        stats = new Stats(
+          stats[0].count_mutants_dna + 1,
+          stats[0].count_humans_dna
+        );
+      } else {
+        stats = new Stats(
+          stats[0].count_mutants_dna,
+          stats[0].count_humans_dna + 1
+        );
+      }
+    }
+    await stats.save();
+    return true;
+  }
+
+  //Avoid find all to DNA
   static async getStats() {
     let stats = await Stats.findAll();
     if (stats.length === 0) {

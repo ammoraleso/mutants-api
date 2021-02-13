@@ -20,6 +20,7 @@ describe('DNA model test ok', () => {
     const db = {
       collection: jest.fn().mockImplementation(() => ({
         updateOne: jest.fn(() => Promise.resolve(resultUpdate)),
+        findOne: jest.fn(() => Promise.resolve(resultUpdate)),
         find: jest.fn().mockImplementation(() => ({
           toArray: jest.fn(() => Promise.resolve(resultArray)),
         })),
@@ -39,6 +40,11 @@ describe('DNA model test ok', () => {
     const resFindAll = await Dna.findAll();
     expect(resFindAll).toBe(resultArray);
   });
+
+  it('FindDna Dna model ok', async () => {
+    const resFindAll = await Dna.findDna();
+    expect(resFindAll).toBe(resultUpdate);
+  });
 });
 
 describe('Dna model test fail', () => {
@@ -46,6 +52,7 @@ describe('Dna model test fail', () => {
     const db = {
       collection: jest.fn().mockImplementation(() => ({
         updateOne: jest.fn(() => Promise.reject(mockDnaToSave)),
+        findOne: jest.fn(() => Promise.reject(mockDnaToSave)),
         find: jest.fn().mockImplementation(() => ({
           toArray: jest.fn(() => Promise.reject(resultArray)),
         })),
@@ -68,6 +75,14 @@ describe('Dna model test fail', () => {
       await Dna.findAll();
     } catch (err) {
       expect(err.message).toBe('Error retrieving all Dna collection ');
+    }
+  });
+
+  it('FindOne Dna model thrown exception', async () => {
+    try {
+      await Dna.findDna();
+    } catch (err) {
+      expect(err.message).toContain('Error retrieving Dna register');
     }
   });
 });

@@ -4,7 +4,7 @@ const logger = require('../logger/logger')(module);
 
 const router = new express.Router();
 
-router.get('/getTransactions', async (req, res) => {
+router.get('/transactions', async (req, res) => {
   try {
     const allTransaction = await Transaction.findAll();
     res.send(allTransaction);

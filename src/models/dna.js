@@ -26,6 +26,18 @@ class Dna {
     }
   }
 
+  static async findDna(pDna) {
+    const db = database.getDb();
+    let dbOp;
+    try {
+      dbOp = await db.collection('dna').findOne({ dna: pDna });
+      return dbOp;
+    } catch (error) {
+      logger.error(`Error retrieving Dna register ${error.message}`);
+      throw Error(`Error retrieving Dna register ${error}`);
+    }
+  }
+
   static async findAll() {
     const db = database.getDb();
     let dbOp;

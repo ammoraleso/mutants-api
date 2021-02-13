@@ -23,8 +23,8 @@ describe('Post Endpoints', () => {
     });
   });
 
-  it('Response 200 /getTransactions', async () => {
-    const res = await request(app).get('/getTransactions');
+  it('Response 200 /transactions', async () => {
+    const res = await request(app).get('/transactions');
     expect(res.statusCode).toEqual(200);
   });
 });
@@ -36,8 +36,8 @@ describe('Post Endpoints', () => {
     });
   });
 
-  it('Response 401 /getTransactions', async () => {
-    const res = await request(app).get('/getTransactions');
+  it('Response 401 /transactions', async () => {
+    const res = await request(app).get('/transactions');
     expect(res.statusCode).toEqual(401);
   });
 });
