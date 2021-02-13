@@ -6,6 +6,13 @@ const request = require('supertest');
 jest.mock('../models/transaction');
 const Transaction = require('../models/transaction');
 
+jest.mock('../logger/logger', () => {
+  return jest.fn().mockImplementation(() => ({
+    info: jest.fn(() => 'info'),
+    error: jest.fn(() => 'error'),
+  }));
+});
+
 app.use(transactionRouter); //routes
 
 describe('Post Endpoints', () => {

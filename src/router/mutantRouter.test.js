@@ -6,6 +6,13 @@ const request = require('supertest');
 jest.mock('../controller/mutantController');
 const mutantController = require('../controller/mutantController');
 
+jest.mock('../logger/logger', () => {
+  return jest.fn().mockImplementation(() => ({
+    info: jest.fn(() => 'info'),
+    error: jest.fn(() => 'error'),
+  }));
+});
+
 app.use(require('body-parser').json());
 app.use(mutantRouter); //routes
 

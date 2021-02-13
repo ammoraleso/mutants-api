@@ -1,6 +1,6 @@
 const logger = require('../logger/logger')(module);
 const Dna = require('../models/dna');
-const Transaction = require('../models/transaction');
+const Stats = require('../models/stats');
 
 let counterSequence = 0;
 let lettesOfDna = ['A', 'T', 'G', 'C'];
@@ -54,7 +54,30 @@ class mutantController {
     counterSequence = 0;
     await matrix.map((col, i) => this.getLinesWithSequence(matrix, i));
     logger.info(counterSequence);
-    return counterSequence > 1 ? true : false;
+    let isMutant = counterSequence > 1 ? true : false;
+    let stats = await Stats.findAll();
+    if (stats.length === 0) {
+      if (isMutant) {
+        stats = new Stats(1, 0);
+      } else {
+        stats = new Stats(1, 0);
+      }
+      await stats.save();
+      return isMutant;
+    }
+    if (isMutant) {
+      stats = new Stats(
+        stats[0].count_mutants_dna + 1,
+        stats[0].count_humans_dna
+      );
+    } else {
+      stats = new Stats(
+        stats[0].count_mutants_dna,
+        stats[0].count_humans_dna + 1
+      );
+    }
+    await stats.save();
+    return isMutant;
   }
 
   /**
@@ -80,10 +103,16 @@ class mutantController {
       line = this.getDiagInfRowSec(matrix, index);
       this.findSequenceInLine(line);
     }
+    if (counterSequence > 1) {
+      return;
+    }
 
     // Because always i'm comparing with the next register.
     for (let i = 0; i <= matrix.length - 2; i++) {
       rest = matrix.length - i;
+      if (counterSequence > 1) {
+        return;
+      }
       if (rest < 4 && counterColumn === 0 && counterRow === 0) {
         break;
       }
@@ -146,6 +175,9 @@ class mutantController {
   static findSequenceInLine(line) {
     let rest = 0;
     let counter = 0;
+    if (counterSequence > 1) {
+      return;
+    }
     if (line.length < 4) {
       return;
     }
@@ -162,26 +194,18 @@ class mutantController {
       }
     }
   }
-  
+
   //TODO Crear tabla de conteo
   static async getStats() {
-    let dnaStats = await Dna.findAll();
-    let stats = {Description : "No hay individuos en la base de datos"};
-    if (dnaStats != null && dnaStats.length != 0) {
-      const counterMutants = dnaStats.filter((item) => {
-        return item.isMutant === true;
-      }).length;
-      const counterHumans = dnaStats.filter((item) => {
-        return item.isMutant === false;
-      }).length;
-
-      let ratio = counterMutants / counterHumans;
-      stats = {
-        count_mutant_dna: counterMutants,
-        count_hummans_dna: counterHumans,
-        ratio: ratio,
-      };
+    let stats = await Stats.findAll();
+    if (stats.length === 0) {
+      return { Description: 'No hay individuos para analizar' };
     }
+    stats = {
+      count_mutants_dna: stats[0].count_mutants_dna,
+      count_humans_dna: stats[0].count_humans_dna,
+      ratio: stats[0].ratio,
+    };
     return stats;
   }
 }

@@ -4,6 +4,16 @@ const database = require('../database/database');
 jest.mock('../models/dna');
 const Dna = require('../models/dna');
 
+jest.mock('../models/stats');
+const Stats = require('../models/stats');
+
+jest.mock('../logger/logger', () => {
+  return jest.fn().mockImplementation(() => ({
+    info: jest.fn(() => 'info'),
+    error: jest.fn(() => 'error'),
+  }));
+});
+
 const resultArray = [];
 
 const mockDna = ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'];
@@ -32,12 +42,42 @@ const mockMatrixHuman = [
 const lineMock = ['A', 'T', 'G', 'C', 'G', 'A'];
 
 describe('Controller test', () => {
-  it('ValidateMutant', async () => {
+  it('Validate is mutant true without stats', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
     const mockStaticMethod = jest.fn();
     mockStaticMethod.mockReturnValue(mockDnaToSave);
     Dna.save = mockStaticMethod.bind(Dna);
     const resp = await mutantController.validateMutant(dna);
     expect(resp).toBe(true);
+  });
+
+  it('Validate is mutant true with stats', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([
+      { count_humans_dna: 1, count_mutants_dna: 1 },
+    ]);
+    const mockStaticMethod = jest.fn();
+    mockStaticMethod.mockReturnValue(mockDnaToSave);
+    Dna.save = mockStaticMethod.bind(Dna);
+    const resp = await mutantController.validateMutant(dna);
+    expect(resp).toBe(true);
+  });
+
+  it('isMutant false', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixHuman);
+    expect(isMutant).toBe(false);
   });
 
   it('conver To matrix', () => {
@@ -54,11 +94,23 @@ describe('Controller test', () => {
   });
 
   it('isMutant True', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
     const isMutant = await mutantController.isMutant(mockMatrix);
     expect(isMutant).toBe(true);
   });
 
   it('isMutant False', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([
+      { count_humans_dna: 1, count_mutants_dna: 1 },
+    ]);
     const isMutant = await mutantController.isMutant(mockMatrixHuman);
     expect(isMutant).toBe(false);
   });

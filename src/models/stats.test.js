@@ -1,4 +1,4 @@
-const Dna = require('./dna');
+const Stats = require('./stats');
 const database = require('../database/database');
 
 jest.mock('../logger/logger', () => {
@@ -8,14 +8,13 @@ jest.mock('../logger/logger', () => {
   }));
 });
 
-const mockDna = ['ATGCGA', 'CAGTGC', 'TTATGT', 'AGAAGG', 'CCCCTA', 'TCACTG'];
-
-const mockDnaToSave = new Dna(mockDna, true);
+const mockStats = new Stats(3, 4);
+const mockStatsOther = new Stats(3, 0);
 
 const resultUpdate = {};
 const resultArray = [];
 
-describe('DNA model test ok', () => {
+describe('Stats model test ok', () => {
   beforeEach(() => {
     const db = {
       collection: jest.fn().mockImplementation(() => ({
@@ -30,13 +29,13 @@ describe('DNA model test ok', () => {
     database.getDb.mockReturnValue(db);
   });
 
-  it('Save Dna', async () => {
-    const resp = await mockDnaToSave.save();
+  it('Save Stats', async () => {
+    const resp = await mockStats.save();
     expect(resp).toBe(resultUpdate);
   });
 
-  it('FindAll Dna model ok', async () => {
-    const resFindAll = await Dna.findAll();
+  it('FindAll Stats model ok', async () => {
+    const resFindAll = await Stats.findAll();
     expect(resFindAll).toBe(resultArray);
   });
 });
@@ -45,7 +44,7 @@ describe('Dna model test fail', () => {
   beforeEach(() => {
     const db = {
       collection: jest.fn().mockImplementation(() => ({
-        updateOne: jest.fn(() => Promise.reject(mockDnaToSave)),
+        updateOne: jest.fn(() => Promise.reject(mockStats)),
         find: jest.fn().mockImplementation(() => ({
           toArray: jest.fn(() => Promise.reject(resultArray)),
         })),
@@ -55,19 +54,19 @@ describe('Dna model test fail', () => {
     database.getDb.mockReturnValue(db);
   });
 
-  it('Not save Dna', async () => {
+  it('Not save Stats', async () => {
     try {
-      await mockDnaToSave.save();
+      await mockStats.save();
     } catch (err) {
-      expect(err.message).toContain('Error savingDna collection');
+      expect(err.message).toContain('Error stats collection');
     }
   });
 
-  it('FindAll Dna model thrown exception', async () => {
+  it('FindAll Stats model thrown exception', async () => {
     try {
-      await Dna.findAll();
+      await Stats.findAll();
     } catch (err) {
-      expect(err.message).toBe('Error retrieving all Dna collection ');
+      expect(err.message).toBe('Error retrieving all Stats collection ');
     }
   });
 });

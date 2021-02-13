@@ -3,7 +3,12 @@ const healthRouter = require('./healthCheck'); //import file we are testing
 const app = express(); //an instance of an express app, a 'fake' express app
 const request = require('supertest');
 
-jest.mock('../controller/mutantController');
+jest.mock('../logger/logger', () => {
+  return jest.fn().mockImplementation(() => ({
+    info: jest.fn(() => 'info'),
+    error: jest.fn(() => 'error'),
+  }));
+});
 
 app.use(healthRouter); //routes
 

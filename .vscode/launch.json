@@ -20,7 +20,7 @@
             "runtimeArgs": [
               "--inspect-brk",
               "${workspaceRoot}/node_modules/jest/bin/jest.js",
-              "--testPathPattern='mutantRouter.test'",
+              "--testPathPattern='mutantController.test.js'",
               "--runInBand"
             ],
             "console": "integratedTerminal",
