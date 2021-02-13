@@ -241,10 +241,8 @@ Response: 200 (application/json)
 
 #### Automaticos
 
-Para la creacion y ejecucion de test utilice Jest y Supertest donde mockee todos los elementos necesarios (teniendo en cuenta la BD) para asi poder llegar al coverage estimado. 
+Para la creacion y ejecucion de test utilice Jest y Supertest donde mockee todos los elementos necesarios (teniendo en cuenta la BD) para asi poder llegar al coverage estimado.
 
 En este caso intente tener el mayor coverage posible y logré el 100% según lo que muestrán los test locales.
 
-![Coverage Image](https://drive.google.com/file/d/1zPAldsmh9lmSY0LpyQAz_BHCvyWAx8jl/view?usp=sharing)
-
-
+![Coverage Image](doc/images/coverage.jpg)

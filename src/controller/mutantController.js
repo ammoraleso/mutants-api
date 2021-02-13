@@ -185,7 +185,7 @@ class mutantController {
       if (isMutant) {
         stats = new Stats(1, 0);
       } else {
-        stats = new Stats(1, 0);
+        stats = new Stats(0, 1);
       }
     } else {
       if (isMutant) {
