@@ -261,6 +261,6 @@ Consideraciones:
 
 #### Desplieque
 
-Para esto se utilizo el siguiente modelo:
+Para esto se utilizo el siguiente modelo (Azure + Node + MongoDb):
 
 ![Coverage Image](doc/images/architecture.png)
