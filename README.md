@@ -258,3 +258,9 @@ Consideraciones:
     - Se recorren las matrices inferiores y superriores en los dos sentidos
 
     - Aprovechar la matriz NXN para poder recorrerla de manera horizontal y vertical
+
+#### Desplieque
+
+Para esto se utilizo el siguiente modelo:
+
+![Coverage Image](doc/images/architecture.png)
