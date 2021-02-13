@@ -264,4 +264,4 @@ Consideraciones:
 
 Para esto se utilizo el siguiente modelo (Azure + Node + MongoDb):
 
-![Coverage Image](doc/images/diagram.png)
+![Coverage Image](doc/images/NewDiagram.png)
