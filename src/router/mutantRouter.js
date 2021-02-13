@@ -29,7 +29,7 @@ router.post('/mutant', async (req, res) => {
       return;
     }
     res.status(403).send({
-      Description: 'El individuo es MUTANTE',
+      Description: 'El individuo es HUMANO',
       isMutant: isMutant,
       Status: 'Bad',
     });
