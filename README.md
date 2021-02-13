@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/amcomaschi/mutants.svg?branch=master)](https://travis-ci.org/amcomaschi/mutants)
-[![codecov](https://codecov.io/gh/amcomaschi/mutants/branch/master/graph/badge.svg)](https://codecov.io/gh/amcomaschi/mutants)
-
 # Ejercicio Mutantes - Mercadolibre
 
 Ejercicio práctico para MercadoLibre.
@@ -245,4 +242,4 @@ Para la creacion y ejecucion de test utilice Jest y Supertest donde mockee todos
 
 En este caso intente tener el mayor coverage posible y logré el 100% según lo que muestrán los test locales.
 
-![Coverage Image](doc/images/coverage.jpg)
+![Coverage Image](doc/images/coverage.PNG)
