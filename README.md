@@ -260,6 +260,10 @@ Para realizar el algorimo lo hice de la siguiente manera:
 
 ![Coverage Image](doc/images/Algorit.PNG)
 
+![Coverage Image](doc/images/Matrix.PNG)
+
+Para recrear la itearación tenemos la siguiente imagen, la cual 
+
 Consideraciones:
 
     - Recorrer la matriz hasta tener mas de 1 secuencia y terminar el procedimiento
