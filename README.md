@@ -258,7 +258,7 @@ En este caso intente tener el mayor coverage posible y logré el 100% según lo 
 
 Para realizar el algorimo lo hice de la siguiente manera:
 
-![Coverage Image](doc/images/Algoritmo.PNG)
+![Coverage Image](doc/images/Algorit.PNG)
 
 Consideraciones:
 
