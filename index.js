@@ -5,6 +5,9 @@ const transactionRouter = require('./src/router/transactionRouter');
 const healthCheck = require('./src/router/healthCheck');
 const database = require('./src/database/database');
 
+const swaggerUi = require('swagger-ui-express');
+swaggerDocument = require('./swagger.json');
+
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -13,6 +16,7 @@ app.use(express.json());
 app.use(mutantRouter);
 app.use(transactionRouter);
 app.use(healthCheck);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, async () => {
   try {

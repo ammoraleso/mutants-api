@@ -1,0 +1,257 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Mutant Api",
+      "description": "Documentation about Mutant-API for Meli",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "https://mutants-api.azurewebsites.net",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Mutants - API",
+        "description": "API for get Mutants dna"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/health": {
+        "get": {
+          "tags": [
+            "Healh"
+          ],
+          "summary": "Get a message if the status of the API is Up",
+          "responses": {
+            "200": {
+              "description": "Get a message if the status of the API is Up to know that all was installed correctly",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Status": {
+                    "type": "string",
+                    "example": "Up"
+                  },
+                  "Description": {
+                    "type": "string",
+                    "example": "Api is running."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/mutant": {
+        "post": {
+          "tags": [
+            "Mutant"
+          ],
+          "summary": "Get the type of dna",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "dna",
+              "required": "true",
+              "type": "array",
+              "example": "{\"dna\" : [\"AAAA\", \"TTTT\", \"GTCA\", \"GGGG\"]}",
+              "minimum": 1,
+              "description": "The dna to analize."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Get a message indicating that the dna belong to mutant save the object and update the stats",
+              "schema": {
+                "properties": {
+                  "Description": {
+                    "type": "string",
+                    "example": "El individuo es MUTANTE"
+                  },
+                  "isMutant": {
+                    "type": "boolean",
+                    "example": "true"
+                  },
+                  "Status": {
+                    "type": "String",
+                    "example": "ok"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Get a message indicating the error that the code throw",
+              "schema": {
+                "properties": {
+                  "Error": {
+                    "type": "string",
+                    "example": "Error message"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Get a message indicating if the dna belong to human or human, save the object and update the stats",
+              "schema": {
+                "properties": {
+                  "Description": {
+                    "type": "string",
+                    "example": "El individuo es HUMANO"
+                  },
+                  "isMutant": {
+                    "type": "boolean",
+                    "example": "false"
+                  },
+                  "Status": {
+                    "type": "String",
+                    "example": "Bad"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/stats": {
+        "get": {
+          "tags": [
+            "Stats"
+          ],
+          "summary": "Get a summary about the quantity of humans and mutants are in DB",
+          "responses": {
+            "200": {
+              "description": "Get a sumary and calculate the ration mutants/humans",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "count_mutants_dna": {
+                    "type": "integer",
+                    "example": "2"
+                  },
+                  "count_humans_dna": {
+                    "type": "integer",
+                    "example": "6"
+                  },
+                  "ratio": {
+                    "type": "double",
+                    "example": "0.333333"
+                  }
+                }
+              }
+            },
+            "400": {
+                "description": "Get a message indicating the error that the code throw",
+                "schema": {
+                  "properties": {
+                    "Error": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  }
+                }
+            }
+          }
+        }
+      },
+      "/transactions": {
+        "get": {
+          "tags": [
+            "transactions"
+          ],
+          "summary": "Get a summary of transactions realize by the user",
+          "responses": {
+            "200": {
+              "description": "Get  summary of transactions realize by the user with description and date",
+              "schema": {
+                "$ref": "#/definitions/transaction"
+              }
+            },
+            "400": {
+                "description": "Get a message indicating the error that the code throw",
+                "schema": {
+                  "properties": {
+                    "Error": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  }
+                }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "dna": {
+        "required": [
+          "_id"
+        ],
+        "properties": {
+          "_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "dna": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isMutant": {
+            "type": "boolean"
+          }
+        }
+      },
+      "stats": {
+        "required": [
+          "_id"
+        ],
+        "properties": {
+          "_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "id": {
+            "type": "integer"
+          },
+          "count_humans_dna": {
+            "type": "integer"
+          },
+          "count_mutants_dna": {
+            "type": "integer"
+          },
+          "ratio": {
+            "type": "0.3333333333333333"
+          }
+        }
+      },
+      "transaction": {
+        "required": [
+          "_id"
+        ],
+        "properties": {
+          "_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "transaction": {
+            "type": "string"
+          },
+          "date": {
+            "type": "date-time"
+          }
+        }
+      }
+    }
+  }
