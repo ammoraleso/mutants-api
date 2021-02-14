@@ -30,6 +30,42 @@ const mockMatrix = [
   ['T', 'C', 'A', 'C', 'T', 'G'],
 ];
 
+const mockMatrixTwoDiagsSup = [
+  ['A', 'T', 'G', 'C', 'G', 'A'],
+  ['C', 'A', 'T', 'T', 'G', 'C'],
+  ['T', 'T', 'A', 'T', 'G', 'T'],
+  ['A', 'G', 'A', 'A', 'T', 'G'],
+  ['C', 'C', 'C', 'C', 'T', 'A'],
+  ['T', 'C', 'A', 'C', 'T', 'G'],
+];
+
+const mockMatrixTwoDiagsSupSec = [
+  ['A', 'T', 'G', 'C', 'A', 'A'],
+  ['C', 'T', 'G', 'A', 'A', 'C'],
+  ['T', 'T', 'A', 'A', 'G', 'T'],
+  ['A', 'A', 'A', 'A', 'T', 'G'],
+  ['C', 'C', 'C', 'C', 'T', 'A'],
+  ['T', 'C', 'A', 'C', 'T', 'G'],
+];
+
+const mockMatrixTwoDiagsInfSec = [
+  ['A', 'T', 'G', 'C', 'C', 'A'],
+  ['C', 'T', 'G', 'A', 'A', 'C'],
+  ['T', 'T', 'A', 'A', 'C', 'T'],
+  ['A', 'A', 'A', 'C', 'T', 'G'],
+  ['C', 'A', 'C', 'C', 'T', 'A'],
+  ['T', 'C', 'A', 'C', 'T', 'G'],
+];
+
+const mockMatrixTwoDiagsInfMain = [
+  ['A', 'T', 'G', 'C', 'G', 'A'],
+  ['C', 'A', 'T', 'T', 'G', 'C'],
+  ['T', 'C', 'A', 'C', 'G', 'T'],
+  ['A', 'G', 'C', 'A', 'T', 'G'],
+  ['C', 'C', 'T', 'C', 'T', 'A'],
+  ['T', 'C', 'A', 'C', 'T', 'G'],
+];
+
 const mockMatrixHuman = [
   ['A', 'T', 'G', 'C', 'G', 'A'],
   ['C', 'A', 'G', 'T', 'A', 'C'],
@@ -100,6 +136,46 @@ describe('Controller test', () => {
     });
     Stats.findAll.mockReturnValue([]);
     const isMutant = await mutantController.isMutant(mockMatrix);
+    expect(isMutant).toBe(true);
+  });
+
+  it('isMutant True two diagonals main sup', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixTwoDiagsSup);
+    expect(isMutant).toBe(true);
+  });
+
+  it('isMutant True two diagonals sec sup', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixTwoDiagsSupSec);
+    expect(isMutant).toBe(true);
+  });
+
+  it('isMutant True two diagonals main inf', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixTwoDiagsInfMain);
+    expect(isMutant).toBe(true);
+  });
+
+  it('isMutant True two diagonals sec inf', async () => {
+    Stats.save = jest.fn();
+    Stats.save.mockImplementation(() => {
+      Promise.resolve(true);
+    });
+    Stats.findAll.mockReturnValue([]);
+    const isMutant = await mutantController.isMutant(mockMatrixTwoDiagsInfSec);
     expect(isMutant).toBe(true);
   });
 
@@ -189,32 +265,6 @@ describe('Controller test', () => {
     mutantController.getLinesWithSequence = jest.fn();
     mutantController.getLinesWithSequence(mockMatrix, 0);
     expect(mutantController.getLinesWithSequence).toHaveBeenCalled();
-  });
-
-  it('getDiagSupCol', async () => {
-    const resp = mutantController.getDiagSupCol(mockMatrix, 0);
-    expect(resp).toEqual(['A', 'A', 'A', 'A', 'T', 'G']);
-  });
-
-  it('getDiagInfRow', async () => {
-    const resp = mutantController.getDiagInfRow(mockMatrix, 0);
-    expect(resp).toEqual(['A', 'A', 'A', 'A', 'T', 'G']);
-  });
-
-  it('getDiagSupColSec', async () => {
-    const resp = mutantController.getDiagSupColSec(mockMatrix, 0);
-    expect(resp).toEqual(['A', 'G', 'T', 'A', 'C', 'T']);
-  });
-
-  it('getDiagInfRowSec', async () => {
-    const resp = mutantController.getDiagInfRowSec(mockMatrix, 0);
-    expect(resp).toEqual(['A', 'G', 'T', 'A', 'C', 'T']);
-  });
-
-  it('findSequenceInLine', async () => {
-    mutantController.findSequenceInLine = jest.fn();
-    mutantController.findSequenceInLine(lineMock);
-    expect(mutantController.findSequenceInLine).toHaveBeenCalled();
   });
 
   it('ValidateMutant throw error', async () => {

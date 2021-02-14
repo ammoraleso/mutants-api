@@ -66,22 +66,83 @@ class mutantController {
    * @param {Index of the iteration} index
    */
   static getLinesWithSequence(matrix, index) {
+    this.getDiagCount(matrix, index);
+    this.getRowColCount(matrix, index);
+  }
+
+  static getDiagCount(matrix, index) {
+    let restDiag = 0;
+    let counterSupDerSeq = 0;
+    let counterSupIzqSeq = 0;
+    let counterInfDerSeq = 0;
+    let counterInfIzqSeq = 0;
+
+    for (let i = 0; i <= matrix.length - index - 2; i++) {
+      restDiag = matrix.length - i - index;
+      if (i === 0 && restDiag < 4) {
+        return;
+      }
+      if (counterSequence > 1) {
+        return;
+      }
+      if (
+        restDiag < 4 &&
+        counterSupDerSeq === 0 &&
+        counterSupIzqSeq === 0 &&
+        counterInfDerSeq === 0 &&
+        counterInfIzqSeq === 0
+      ) {
+        break;
+      }
+      counterSupDerSeq =
+        matrix[i][i + index] === matrix[i + 1][i + index + 1]
+          ? counterSupDerSeq + 1
+          : 0;
+
+      counterSupIzqSeq =
+        matrix[i][matrix.length - index - i - 1] ===
+        matrix[i + 1][matrix.length - index - i - 2]
+          ? counterSupIzqSeq + 1
+          : 0;
+
+      if (index > 0) {
+        logger.info();
+        counterInfDerSeq =
+          matrix[i + index][i] === matrix[i + 1 + index][i + 1]
+            ? counterInfDerSeq + 1
+            : 0;
+
+        counterInfIzqSeq =
+          matrix[i + index][matrix.length - i - 1] ===
+          matrix[i + index + 1][matrix.length - i - 2]
+            ? counterInfIzqSeq + 1
+            : 0;
+      }
+
+      if (counterSupDerSeq === 3) {
+        counterSupDerSeq = 0;
+        counterSequence++;
+      }
+      if (counterSupIzqSeq === 3) {
+        counterSupIzqSeq = 0;
+        counterSequence++;
+      }
+
+      if (counterInfDerSeq === 3) {
+        counterInfDerSeq = 0;
+        counterSequence++;
+      }
+      if (counterInfIzqSeq === 3) {
+        counterInfIzqSeq = 0;
+        counterSequence++;
+      }
+    }
+  }
+
+  static getRowColCount(matrix, index) {
     let counterColumn = 0;
     let counterRow = 0;
     let rest = 0;
-    let line = [];
-
-    //Get Diagonal line to count letters
-    line = this.getDiagSupCol(matrix, index);
-    this.findSequenceInLine(line);
-    line = this.getDiagSupColSec(matrix, index);
-    this.findSequenceInLine(line);
-    if (index > 0) {
-      line = this.getDiagInfRow(matrix, index);
-      this.findSequenceInLine(line);
-      line = this.getDiagInfRowSec(matrix, index);
-      this.findSequenceInLine(line);
-    }
     if (counterSequence > 1) {
       return;
     }
@@ -103,72 +164,13 @@ class mutantController {
 
       //Because if counterColum or CounterRow are 3 is becase it have the same letters in 4 positions
       if (counterColumn === 3) {
+        logger.error('Column Add new register');
         counterColumn = 0;
         counterSequence++;
       }
       if (counterRow === 3) {
+        logger.error('Row Add new register');
         counterRow = 0;
-        counterSequence++;
-      }
-    }
-  }
-
-  static getDiagSupCol(matrix, nCol) {
-    let line = [];
-    for (let i = 0; i <= matrix.length - nCol - 1; i++) {
-      line.push(matrix[i][i + nCol]);
-    }
-    return line;
-  }
-
-  static getDiagInfRow(matrix, nRow) {
-    let line = [];
-
-    for (let i = 0; i <= matrix.length - nRow - 1; i++) {
-      line.push(matrix[i + nRow][i]);
-    }
-    return line;
-  }
-
-  static getDiagSupColSec(matrix, nCol) {
-    let line = [];
-    for (let i = 0; i <= matrix.length - nCol - 1; i++) {
-      line.push(matrix[i][matrix.length - nCol - i - 1]);
-    }
-    return line;
-  }
-
-  static getDiagInfRowSec(matrix, nRow) {
-    let line = [];
-
-    for (let i = 0; i <= matrix.length - nRow - 1; i++) {
-      line.push(matrix[i + nRow][matrix.length - i - 1]);
-    }
-    return line;
-  }
-
-  /**
-   * Count if the line have the sequence of 4 letters and update counterSequence value
-   * @param {Line to validate} line
-   */
-  static findSequenceInLine(line) {
-    let rest = 0;
-    let counter = 0;
-    if (counterSequence > 1) {
-      return;
-    }
-    if (line.length < 4) {
-      return;
-    }
-    for (let i = 0; i <= line.length - 2; i++) {
-      rest = line.length - i;
-      if (rest < 4 && counter === 0) {
-        break;
-      }
-      //Just 1 row to evaluate
-      counter = line[i][0] === line[i + 1][0] ? counter + 1 : 0;
-      if (counter === 3) {
-        counter = 0;
         counterSequence++;
       }
     }
