@@ -10,6 +10,7 @@ Ejercicio práctico para MercadoLibre.
   - [Uso](#uso)
   - [API Url](#api)
   - [Servicios](#servicios)
+    - [Swagger](#Swagger)
     - [Healt](#Health)
     - [Mutantes](#Mutantes)
     - [Estadisticas](#Estadisticas)
@@ -30,6 +31,7 @@ Ejercicio práctico para MercadoLibre.
 - [Jest](https://www.npmjs.com/package/jest)
 - [Winston](https://www.npmjs.com/package/winston)
 - [Express](https://www.npmjs.com/package/express)
+- [Swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
 
 ### Comentarios
 
@@ -90,6 +92,12 @@ URL local: http://localhost:3000
 URL hosteada en Azure: https://mutants-api.azurewebsites.net/
 
 ### Servicios
+
+#### Swagger
+
+Para poder ver mas a detalle como funcionan los servicios cree una documentacion en SWAGGER y esta disponible en la siguiente URL:
+
+https://mutants-api.azurewebsites.net/api-docs/#/
 
 #### Health
 
